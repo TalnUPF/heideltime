@@ -9,9 +9,11 @@ import org.apache.uima.UimaContext;
 import org.apache.uima.cas.AbstractCas;
 import org.apache.uima.cas.SofaID;
 import org.apache.uima.resource.ResourceAccessException;
+import org.apache.uima.resource.ResourceConfigurationException;
 import org.apache.uima.resource.Session;
 import org.apache.uima.util.InstrumentationFacility;
 import org.apache.uima.util.Logger;
+import org.apache.uima.util.Settings;
 
 @SuppressWarnings("deprecation")
 public class StandaloneConfigContext implements UimaContext {
@@ -165,6 +167,30 @@ public class StandaloneConfigContext implements UimaContext {
 	@Override
 	@SuppressWarnings("rawtypes")
 	public AbstractCas getEmptyCas(Class aCasInterface) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getSharedSettingValue(String name) throws ResourceConfigurationException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String[] getSharedSettingArray(String name) throws ResourceConfigurationException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String[] getSharedSettingNames() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Settings getExternalOverrides() {
 		// TODO Auto-generated method stub
 		return null;
 	}

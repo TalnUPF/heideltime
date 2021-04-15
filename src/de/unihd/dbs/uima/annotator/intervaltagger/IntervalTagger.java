@@ -20,6 +20,7 @@ import org.apache.uima.cas.FSIterator;
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.resource.ResourceInitializationException;
 
+import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
 import de.unihd.dbs.uima.annotator.heideltime.resources.Language;
 import de.unihd.dbs.uima.annotator.heideltime.resources.RePatternManager;
 import de.unihd.dbs.uima.annotator.heideltime.resources.ResourceMap;
@@ -27,7 +28,6 @@ import de.unihd.dbs.uima.annotator.heideltime.resources.ResourceScanner;
 import de.unihd.dbs.uima.annotator.heideltime.utilities.Logger;
 import de.unihd.dbs.uima.annotator.heideltime.utilities.Toolbox;
 import de.unihd.dbs.uima.types.heideltime.IntervalCandidateSentence;
-import de.unihd.dbs.uima.types.heideltime.Sentence;
 import de.unihd.dbs.uima.types.heideltime.Timex3;
 import de.unihd.dbs.uima.types.heideltime.Timex3Interval;
 

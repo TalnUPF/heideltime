@@ -27,9 +27,12 @@ import java.util.regex.Pattern;
 import org.apache.uima.UimaContext;
 import org.apache.uima.analysis_component.JCasAnnotator_ImplBase;
 import org.apache.uima.cas.FSIterator;
+import org.apache.uima.fit.descriptor.ConfigurationParameter;
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.resource.ResourceInitializationException;
 
+import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
+import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 import de.unihd.dbs.uima.annotator.heideltime.ProcessorManager.Priority;
 import de.unihd.dbs.uima.annotator.heideltime.processors.TemponymPostprocessing;
 import de.unihd.dbs.uima.annotator.heideltime.resources.Language;
@@ -43,9 +46,7 @@ import de.unihd.dbs.uima.annotator.heideltime.utilities.LocaleException;
 import de.unihd.dbs.uima.annotator.heideltime.utilities.Logger;
 import de.unihd.dbs.uima.annotator.heideltime.utilities.Toolbox;
 import de.unihd.dbs.uima.types.heideltime.Dct;
-import de.unihd.dbs.uima.types.heideltime.Sentence;
 import de.unihd.dbs.uima.types.heideltime.Timex3;
-import de.unihd.dbs.uima.types.heideltime.Token;
 
 
 /**
@@ -73,30 +74,52 @@ public class HeidelTime extends JCasAnnotator_ImplBase {
 	// COUNTER FOR TIMEX IDS
 	private int timexID = 0;
 	
-	// INPUT PARAMETER HANDLING WITH UIMA
-	private String PARAM_LANGUAGE         = "Language";
-	// supported languages (2012-05-19): english, german, dutch, englishcoll, englishsci
-	private String PARAM_TYPE_TO_PROCESS  = "Type";
-	// chosen locale parameter name
-	private String PARAM_LOCALE			   = "locale";
-	// supported types (2012-05-19): news (english, german, dutch), narrative (english, german, dutch), colloquial
-	private Language language       = Language.ENGLISH;
-	private String typeToProcess  = "news";
+	// INPUT PARAMETER
 	
-	// INPUT PARAMETER HANDLING WITH UIMA (which types shall be extracted)
-	private String PARAM_DATE      = "Date";
-	private String PARAM_TIME      = "Time";
-	private String PARAM_DURATION  = "Duration";
-	private String PARAM_SET       = "Set";
-	private String PARAM_TEMPONYMS = "Temponym";
-	private String PARAM_DEBUG	   = "Debugging";
-	private String PARAM_GROUP     = "ConvertDurations";
-	private Boolean find_dates     = true;
-	private Boolean find_times     = true;
-	private Boolean find_durations = true;
-	private Boolean find_sets      = true;
-	private Boolean find_temponyms = false;
-	private Boolean group_gran     = true;
+	// supported languages (2012-05-19): english, german, dutch, englishcoll, englishsci
+	public final static String PARAM_LANGUAGE = "language";
+    @ConfigurationParameter(name = PARAM_LANGUAGE, mandatory = false, description = "Language")
+    protected String languageStr = "english";
+    private Language language = Language.ENGLISH;
+    
+    // supported types (2012-05-19): news (english, german, dutch), narrative (english, german, dutch), colloquial
+	public final static String PARAM_TYPE_TO_PROCESS = "type";
+    @ConfigurationParameter(name = PARAM_TYPE_TO_PROCESS, mandatory = false, description = "Type")
+    protected String type = "news";
+    
+	// chosen locale parameter name
+	public final static String PARAM_LOCALE = "locale";
+    @ConfigurationParameter(name = PARAM_LOCALE, mandatory = false, description = "locale")
+    protected String locale = "en_GB";
+	
+    public final static String PARAM_DATE = "findDates";
+    @ConfigurationParameter(name = PARAM_DATE, mandatory = false, description = "Find dates")
+    protected Boolean findDates = true;
+    
+    public final static String PARAM_TIME = "findTimes";
+    @ConfigurationParameter(name = PARAM_TIME, mandatory = false, description = "Find times")
+    protected Boolean findTimes = true;
+    
+    public final static String PARAM_DURATION = "findDurations";
+    @ConfigurationParameter(name = PARAM_DURATION, mandatory = false, description = "Find durations")
+    protected Boolean findDurations = true;
+    
+    public final static String PARAM_SET = "findSets";
+    @ConfigurationParameter(name = PARAM_SET, mandatory = false, description = "Fins sets")
+    protected Boolean findSets = true;
+    
+    public final static String PARAM_TEMPONYMS = "findTemponyms";
+    @ConfigurationParameter(name = PARAM_TEMPONYMS, mandatory = false, description = "Find temponyms")
+    protected Boolean findTemponyms = false;
+    
+    public final static String PARAM_GROUP = "convertDurations";
+    @ConfigurationParameter(name = PARAM_GROUP, mandatory = false, description = "Convert durations")
+    protected Boolean convertDurations = true;
+    
+    public final static String PARAM_DEBUG = "debugging";
+    @ConfigurationParameter(name = PARAM_DEBUG, mandatory = false, description = "Debugging mode")
+    protected Boolean debugging = false;
+    
 	// FOR DEBUGGING PURPOSES (IF FALSE)
 	private Boolean deleteOverlapped = true;
 
@@ -110,57 +133,48 @@ public class HeidelTime extends JCasAnnotator_ImplBase {
 		/////////////////////////////////
 		// DEBUGGING PARAMETER SETTING //
 		/////////////////////////////////
-		this.deleteOverlapped = true;
-		Boolean doDebug = (Boolean) aContext.getConfigParameterValue(PARAM_DEBUG);
-		Logger.setPrintDetails(doDebug == null ? false : doDebug);
+		if (debugging) {
+			deleteOverlapped = false;
+		}
+		Logger.setPrintDetails(debugging);
 		
 		/////////////////////////////////
 		// HANDLE LOCALE    		   //
 		/////////////////////////////////
-		String requestedLocale = (String) aContext.getConfigParameterValue(PARAM_LOCALE);
-		if(requestedLocale == null || requestedLocale.length() == 0) { // if the PARAM_LOCALE setting was left empty, 
-			Locale.setDefault(Locale.UK); // use a default, the ISO8601-adhering UK locale (equivalent to "en_GB")
-		} else { // otherwise, check if the desired locale exists in the JVM's available locale repertoire
-			try {
-				Locale locale = DateCalculator.getLocaleFromString(requestedLocale);
-				Locale.setDefault(locale); // sets it for the entire JVM session
-			} catch (LocaleException e) {
-				Logger.printError("Supplied locale parameter couldn't be resolved to a working locale. Try one of these:");
-				String localesString = new String();
-				for(Locale l : Locale.getAvailableLocales()) { // list all available locales
-					localesString += l.toString()+" ";
-				}
-				Logger.printError(localesString);
-				System.exit(-1);
+		
+		// Check if the desired locale exists in the JVM's available locale repertoire
+		try {
+			Locale loc = DateCalculator.getLocaleFromString(locale);
+			Locale.setDefault(loc); // sets it for the entire JVM session
+		} catch (LocaleException e) {
+			Logger.printError("Supplied locale parameter couldn't be resolved to a working locale. Try one of these:");
+			String localesString = new String();
+			for(Locale l : Locale.getAvailableLocales()) { // list all available locales
+				localesString += l.toString()+" ";
 			}
+			Logger.printError(localesString);
+			System.exit(-1);
 		}
 		
-		//////////////////////////////////
-		// GET CONFIGURATION PARAMETERS //
-		//////////////////////////////////
-		language = Language.getLanguageFromString((String) aContext.getConfigParameterValue(PARAM_LANGUAGE));
+		/////////////////////////////////
+		// HANDLE LANGUAGE             //
+		/////////////////////////////////
+		language = Language.getLanguageFromString(languageStr);
 		
-		typeToProcess  = (String)  aContext.getConfigParameterValue(PARAM_TYPE_TO_PROCESS);
-		find_dates     = (Boolean) aContext.getConfigParameterValue(PARAM_DATE);
-		find_times     = (Boolean) aContext.getConfigParameterValue(PARAM_TIME);
-		find_durations = (Boolean) aContext.getConfigParameterValue(PARAM_DURATION);
-		find_sets      = (Boolean) aContext.getConfigParameterValue(PARAM_SET);
-		find_temponyms = (Boolean) aContext.getConfigParameterValue(PARAM_TEMPONYMS);
-		group_gran	   = (Boolean) aContext.getConfigParameterValue(PARAM_GROUP);
 		////////////////////////////////////////////////////////////
 		// READ NORMALIZATION RESOURCES FROM FILES AND STORE THEM //
 		////////////////////////////////////////////////////////////
-		NormalizationManager.getInstance(language, find_temponyms);
+		NormalizationManager.getInstance(language, findTemponyms);
 		
 		//////////////////////////////////////////////////////
 		// READ PATTERN RESOURCES FROM FILES AND STORE THEM //
 		//////////////////////////////////////////////////////
-		RePatternManager.getInstance(language, find_temponyms);
+		RePatternManager.getInstance(language, findTemponyms);
 	
 		///////////////////////////////////////////////////
 		// READ RULE RESOURCES FROM FILES AND STORE THEM //
 		///////////////////////////////////////////////////
-		RuleManager.getInstance(language, find_temponyms);
+		RuleManager.getInstance(language, findTemponyms);
 		
 		/////////////////////////////////////////////////////////////////////////////////
 		// SUBPROCESSOR CONFIGURATION. REGISTER YOUR OWN PROCESSORS HERE FOR EXECUTION //
@@ -172,11 +186,11 @@ public class HeidelTime extends JCasAnnotator_ImplBase {
 		/////////////////////////////
 		// PRINT WHAT WILL BE DONE //
 		/////////////////////////////
-		if (find_dates) Logger.printDetail("Getting Dates...");	
-		if (find_times) Logger.printDetail("Getting Times...");	
-		if (find_durations) Logger.printDetail("Getting Durations...");	
-		if (find_sets) Logger.printDetail("Getting Sets...");
-		if (find_temponyms) Logger.printDetail("Getting Temponyms...");
+		if (findDates) Logger.printDetail("Getting Dates...");	
+		if (findTimes) Logger.printDetail("Getting Times...");	
+		if (findDurations) Logger.printDetail("Getting Durations...");	
+		if (findSets) Logger.printDetail("Getting Sets...");
+		if (findTemponyms) Logger.printDetail("Getting Temponyms...");
 	}
 
 	
@@ -194,13 +208,22 @@ public class HeidelTime extends JCasAnnotator_ImplBase {
 		// run preprocessing processors
 		procMan.executeProcessors(jcas, Priority.PREPROCESSING);
 		
-		RuleManager rulem = RuleManager.getInstance(language, find_temponyms);
+		RuleManager rulem = RuleManager.getInstance(language, findTemponyms);
 		
 		timexID = 1; // reset counter once per document processing
 
 		timex_counter = 0;
 
 		flagHistoricDates = false;
+		
+		// Set token id's
+		int i = 0;
+		FSIterator tokensIter =jcas.getAnnotationIndex(Token.type).iterator();
+		while (tokensIter.hasNext()) {
+			Token s = (Token) tokensIter.next();
+			s.setId(String.valueOf(i));
+			i++;
+		}
 		
 		////////////////////////////////////////////
 		// CHECK SENTENCE BY SENTENCE FOR TIMEXES //
@@ -224,10 +247,10 @@ public class HeidelTime extends JCasAnnotator_ImplBase {
 			Boolean oldDebugState = Logger.getPrintDetails();
 			do {
 				try {
-					if (find_dates) {
+					if (findDates) {
 						findTimexes("DATE", rulem.getHmDatePattern(), rulem.getHmDateOffset(), rulem.getHmDateNormalization(), s, jcas);
 					}
-					if (find_times) {
+					if (findTimes) {
 						findTimexes("TIME", rulem.getHmTimePattern(), rulem.getHmTimeOffset(), rulem.getHmTimeNormalization(), s, jcas);
 					}
 					
@@ -235,7 +258,7 @@ public class HeidelTime extends JCasAnnotator_ImplBase {
 					 *  check for historic dates/times starting with BC
 					 *  to check if post-processing step is required
 					 */
-					if (typeToProcess.equals("narrative") || typeToProcess.equals("narratives")){
+					if (type.equals("narrative") || type.equals("narratives")){
 						FSIterator iterDates = jcas.getAnnotationIndex(Timex3.type).iterator();
 						while (iterDates.hasNext()){
 							Timex3 t = (Timex3) iterDates.next();
@@ -246,13 +269,13 @@ public class HeidelTime extends JCasAnnotator_ImplBase {
 						}
 					}
 					
-					if (find_sets) {
+					if (findSets) {
 						findTimexes("SET", rulem.getHmSetPattern(), rulem.getHmSetOffset(), rulem.getHmSetNormalization(), s, jcas);
 					}
-					if (find_durations) {
+					if (findDurations) {
 						findTimexes("DURATION", rulem.getHmDurationPattern(), rulem.getHmDurationOffset(), rulem.getHmDurationNormalization(), s, jcas);
 					}
-					if (find_temponyms) {
+					if (findTemponyms) {
 						findTimexes("TEMPONYM", rulem.getHmTemponymPattern(), rulem.getHmTemponymOffset(), rulem.getHmTemponymNormalization(), s, jcas);						
 					}
 				} catch(NullPointerException npe) {
@@ -300,7 +323,7 @@ public class HeidelTime extends JCasAnnotator_ImplBase {
 				e.printStackTrace();
 			}
 
-		if (find_temponyms) {
+		if (findTemponyms) {
 			TemponymPostprocessing.handleIntervals(jcas);
 		}
 		
@@ -342,8 +365,8 @@ public class HeidelTime extends JCasAnnotator_ImplBase {
 		annotation.setBegin(begin);
 		annotation.setEnd(end);
 
-		annotation.setFilename(sentence.getFilename());
-		annotation.setSentId(sentence.getSentenceId());
+		//annotation.setFilename(sentence.getFilename());
+		//annotation.setSentId(sentence.getSentenceId());
 		
 		annotation.setEmptyValue(emptyValue);
 
@@ -352,11 +375,11 @@ public class HeidelTime extends JCasAnnotator_ImplBase {
 		while (iterToken.hasNext()) {
 			Token tok = (Token) iterToken.next();
 			if (tok.getBegin() <= begin && tok.getEnd() > begin) {
-				annotation.setFirstTokId(tok.getTokenId());
-				allTokIds = "BEGIN<-->" + tok.getTokenId();
+				annotation.setFirstTokId(Integer.valueOf(tok.getId()));
+				allTokIds = "BEGIN<-->" + tok.getId();
 			}
 			if ((tok.getBegin() > begin) && (tok.getEnd() <= end)) {
-				allTokIds = allTokIds + "<-->" + tok.getTokenId();
+				allTokIds = allTokIds + "<-->" + tok.getId();
 			}
 		}
 		annotation.setAllTokIds(allTokIds);
@@ -493,7 +516,7 @@ public class HeidelTime extends JCasAnnotator_ImplBase {
 
 	@SuppressWarnings("unused")
 	public String specifyAmbiguousValuesString(String ambigString, Timex3 t_i, Integer i, List<Timex3> linearDates, JCas jcas) {
-		NormalizationManager norm = NormalizationManager.getInstance(language, find_temponyms);
+		NormalizationManager norm = NormalizationManager.getInstance(language, findTemponyms);
 
 		// //////////////////////////////////////
 		// IS THERE A DOCUMENT CREATION TIME? //
@@ -507,17 +530,17 @@ public class HeidelTime extends JCasAnnotator_ImplBase {
 		boolean documentTypeNarrative = false;
 		boolean documentTypeColloquial = false;
 		boolean documentTypeScientific = false;
-		if (typeToProcess.equals("news")) {
+		if (type.equals("news")) {
 			documentTypeNews = true;
 		}
-		if (typeToProcess.equals("narrative")
-				|| typeToProcess.equals("narratives")) {
+		if (type.equals("narrative")
+				|| type.equals("narratives")) {
 			documentTypeNarrative = true;
 		}
-		if (typeToProcess.equals("colloquial")) {
+		if (type.equals("colloquial")) {
 			documentTypeColloquial = true;
 		}
-		if (typeToProcess.equals("scientific")) {
+		if (type.equals("scientific")) {
 			documentTypeScientific = true;
 		}
 
@@ -2138,7 +2161,7 @@ public class HeidelTime extends JCasAnnotator_ImplBase {
 		String pos = "";
 		if (hmTokens.containsKey(tokBegin)) {
 			Token tokenToCheck = hmTokens.get(tokBegin);
-			pos = tokenToCheck.getPos();
+			pos = tokenToCheck.getPos().getPosValue();
 		}
 		return pos;
 	}
@@ -2159,7 +2182,7 @@ public class HeidelTime extends JCasAnnotator_ImplBase {
 							HashMap<String, String> hmNormalization,
 							Sentence s,
 							JCas jcas) {
-		RuleManager rm = RuleManager.getInstance(language, find_temponyms);
+		RuleManager rm = RuleManager.getInstance(language, findTemponyms);
 		HashMap<String, String> hmDatePosConstraint = rm.getHmDatePosConstraint();
 		HashMap<String, String> hmDurationPosConstraint = rm.getHmDurationPosConstraint();
 		HashMap<String, String> hmTimePosConstraint = rm.getHmTimePosConstraint();
@@ -2313,7 +2336,7 @@ public class HeidelTime extends JCasAnnotator_ImplBase {
 	
 	
 	public String applyRuleFunctions(String tonormalize, MatchResult m) {
-		NormalizationManager norm = NormalizationManager.getInstance(language, find_temponyms);
+		NormalizationManager norm = NormalizationManager.getInstance(language, findTemponyms);
 		
 		String normalized = "";
 		// pattern for normalization functions + group information
@@ -2476,7 +2499,7 @@ public class HeidelTime extends JCasAnnotator_ImplBase {
 			emptyValue = correctDurationValue(emptyValue);
 		}
 		// For example "PT24H" -> "P1D"
-		if (group_gran)
+		if (convertDurations)
 			value = correctDurationValue(value);
 
 		attributes[0] = value;

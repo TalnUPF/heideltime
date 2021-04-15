@@ -35,9 +35,9 @@ import org.apache.uima.util.Logger;
 import org.apache.uima.util.Progress;
 import org.apache.uima.util.ProgressImpl;
 
+import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
+import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 import de.unihd.dbs.uima.types.heideltime.Dct;
-import de.unihd.dbs.uima.types.heideltime.Sentence;
-import de.unihd.dbs.uima.types.heideltime.Token;
 
 /**
  * CollectionReader for TempEval Data 
@@ -369,8 +369,8 @@ public class Tempeval2Reader extends CollectionReader_ImplBase {
   public Integer addSentenceAnnotation(String sentenceString, String fileId, Integer sentId, Integer positionCounter, JCas jcas){
 	  Sentence sentence = new Sentence(jcas);
 	  Integer begin = positionCounter - sentenceString.length();
-	  sentence.setFilename(fileId);
-	  sentence.setSentenceId(sentId);
+	  //sentence.setFilename(fileId);
+	  //sentence.setSentenceId(sentId);
 	  sentence.setBegin(begin);
 	  sentence.setEnd(positionCounter);
 	  sentence.addToIndexes();
@@ -397,9 +397,9 @@ public class Tempeval2Reader extends CollectionReader_ImplBase {
 		token.setBegin(positionCounter);
 		positionCounter = positionCounter + tokenString.length();
 		token.setEnd(positionCounter);
-		token.setTokenId(tokId);
-		token.setSentId(sentId);
-		token.setFilename(fileId);
+		token.setId(String.valueOf(tokId));
+		//token.setSentId(sentId);
+		//token.setFilename(fileId);
 		token.addToIndexes();
 		
 		String id = fileId+"_"+sentId+"_"+tokId;
