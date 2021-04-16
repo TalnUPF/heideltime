@@ -52,23 +52,6 @@
 	</scm>
 
 	<build>
-		<sourceDirectory>src</sourceDirectory>
-		<outputDirectory>${basedir}/class</outputDirectory>
-		<resources>
-			<resource>
-				<directory>${basedir}</directory>
-				<includes>
-					<include>desc/**/*.xml</include>
-				</includes>
-			</resource>
-			<resource>
-				<directory>resources/</directory>
-				<includes>
-					<include>**/*.txt</include>
-				</includes>
-			</resource>
-		</resources>
-		<finalName>de.unihd.dbs.heideltime.standalone</finalName>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -83,11 +66,6 @@
 			    <version>2.2.1</version>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<configuration>
-					<archive>
-						<manifest>
-							<mainClass>de.unihd.dbs.heideltime.standalone.HeidelTimeStandalone</mainClass>
-						</manifest>
-					</archive>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -101,12 +79,6 @@
 							<goal>shade</goal>
 						</goals>
 						<configuration>
-							<transformers>
-								<transformer
-									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-									<mainClass>de.unihd.dbs.heideltime.standalone.HeidelTimeStandalone</mainClass>
-								</transformer>
-							</transformers>
 						</configuration>
 					</execution>
 				</executions>
