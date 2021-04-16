@@ -116,6 +116,10 @@ public class HeidelTime extends JCasAnnotator_ImplBase {
     @ConfigurationParameter(name = PARAM_GROUP, mandatory = false, description = "Convert durations")
     protected Boolean convertDurations = true;
     
+    public final static String PARAM_USE_COARSE_VALUE = "coarseValue";
+    @ConfigurationParameter(name = PARAM_USE_COARSE_VALUE, mandatory = false, description = "Is coarse PoS to be used intead of regular one. Default: false")
+    protected boolean coarseValue = false;
+    
     public final static String PARAM_DEBUG = "debugging";
     @ConfigurationParameter(name = PARAM_DEBUG, mandatory = false, description = "Debugging mode")
     protected Boolean debugging = false;
@@ -690,7 +694,7 @@ public class HeidelTime extends JCasAnnotator_ImplBase {
 			}
 		}
 		// get the last tense (depending on the part of speech tags used in front or behind the expression)
-		String last_used_tense = ContextAnalyzer.getLastTense(t_i, jcas, language);
+		String last_used_tense = ContextAnalyzer.getLastTense(t_i, jcas, language, coarseValue);
 
 		//////////////////////////
 		// DISAMBIGUATION PHASE //
@@ -2162,6 +2166,9 @@ public class HeidelTime extends JCasAnnotator_ImplBase {
 		if (hmTokens.containsKey(tokBegin)) {
 			Token tokenToCheck = hmTokens.get(tokBegin);
 			pos = tokenToCheck.getPos().getPosValue();
+			if (coarseValue) {
+				pos = tokenToCheck.getPos().getCoarseValue();
+			}
 		}
 		return pos;
 	}
