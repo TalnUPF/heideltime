@@ -17,6 +17,7 @@ import org.apache.uima.UimaContext;
 import org.apache.uima.analysis_component.JCasAnnotator_ImplBase;
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
 import org.apache.uima.cas.FSIterator;
+import org.apache.uima.fit.descriptor.ConfigurationParameter;
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.resource.ResourceInitializationException;
 
@@ -42,13 +43,18 @@ public class IntervalTagger extends JCasAnnotator_ImplBase {
 	private Class<?> component = this.getClass();
 	
 	// descriptor parameter names
-	public static String PARAM_LANGUAGE = "language";
-	public static String PARAM_INTERVALS = "annotate_intervals";
-	public static String PARAM_INTERVAL_CANDIDATES = "annotate_interval_candidates";
-	// descriptor configuration
-	private Language language = null;
-	private Boolean find_intervals = true;
-	private Boolean find_interval_candidates = true;
+	public final static String PARAM_LANGUAGE = "language";
+    @ConfigurationParameter(name = PARAM_LANGUAGE, mandatory = false, description = "Language")
+    protected String languageStr = "english";
+    private Language language = Language.ENGLISH;
+    
+    public final static String PARAM_INTERVALS = "findIntervals";
+    @ConfigurationParameter(name = PARAM_INTERVALS, mandatory = false, description = "Find intervals")
+    protected Boolean findIntervals = true;
+
+	public final static String PARAM_INTERVAL_CANDIDATES = "findIntervalCandidates";
+    @ConfigurationParameter(name = PARAM_INTERVAL_CANDIDATES, mandatory = false, description = "Find intervals candidates")
+    protected Boolean findIntervalCandidates = true;
 	
 	private HashMap<Pattern, String> hmIntervalPattern = new HashMap<Pattern, String>();
 	private HashMap<String, String> hmIntervalNormalization = new HashMap<String, String>();
@@ -59,10 +65,7 @@ public class IntervalTagger extends JCasAnnotator_ImplBase {
 	public void initialize(UimaContext aContext) throws ResourceInitializationException {
 		super.initialize(aContext);
 		
-		language = Language.getLanguageFromString((String) aContext.getConfigParameterValue(PARAM_LANGUAGE));
-		
-		find_intervals = (Boolean) aContext.getConfigParameterValue(PARAM_INTERVALS);
-		find_interval_candidates = (Boolean) aContext.getConfigParameterValue(PARAM_INTERVAL_CANDIDATES);
+		language = Language.getLanguageFromString(languageStr);
 		
 		ResourceScanner rs = ResourceScanner.getInstance();
 		readResources(rs.getRules(language.getName()));
@@ -72,7 +75,7 @@ public class IntervalTagger extends JCasAnnotator_ImplBase {
 	 * called by the pipeline to process the document
 	 */
 	public void process(JCas jcas) throws AnalysisEngineProcessException {
-		if(find_intervals) {
+		if(findIntervals) {
 			findIntervals(jcas);
 			findSentenceIntervals(jcas);
 		}
@@ -193,7 +196,7 @@ public class IntervalTagger extends JCasAnnotator_ImplBase {
 
 			if(count>0){
 
-				if (find_interval_candidates){
+				if (findIntervalCandidates){
 					IntervalCandidateSentence sI=new IntervalCandidateSentence(jcas);
 					sI.setBegin(s.getBegin());
 					sI.setEnd(s.getEnd());
