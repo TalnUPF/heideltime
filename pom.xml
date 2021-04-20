@@ -50,6 +50,95 @@
 		<connection>scm:git:git@github.com:HeidelTime/heideltime.git</connection>
 		<developerConnection>scm:git:git@github.com:HeidelTime/heideltime.git</developerConnection>
 	</scm>
+	
+	<distributionManagement>
+		<repository>
+            <id>maven-releases</id>
+            <name>Internal Release Repository</name>
+            <url>http://maven-taln.upf.edu/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>maven-snapshots</id>
+            <name>Internal Snapshot Repository</name>
+            <url>http://maven-taln.upf.edu/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <repositories>
+        <repository>
+            <id>taln-repo-internal</id>
+            <name>TALN internal repo</name>
+            <url>http://maven-taln.upf.edu/repository/internal/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>taln-repo-snapshots</id>
+            <name>TALN internal repo</name>
+            <url>http://maven-taln.upf.edu/repository/snapshots/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+	<dependencies>
+		<!-- for practically every component -->
+		<dependency>
+			<groupId>org.apache.uima</groupId>
+			<artifactId>uimaj-core</artifactId>
+			<version>${uimaj.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- for the StanfordPOSTaggerWrapper -->
+		<dependency>
+			<groupId>edu.stanford.nlp</groupId>
+			<artifactId>stanford-corenlp</artifactId>
+			<version>3.3.1</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- these are for JVnTextPro -->
+		<dependency>
+			<groupId>args4j</groupId>
+			<artifactId>args4j</artifactId>
+			<version>2.32</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.dbtsai.lbfgs</groupId>
+			<artifactId>lbfgs</artifactId>
+			<version>0.1</version>
+			<scope>provided</scope>
+		</dependency>
+		
+		<!-- DKPro types -->
+		<dependency>
+			<groupId>org.dkpro.core</groupId>
+			<artifactId>dkpro-core-asl</artifactId>
+			<version>${dkpro.version}</version>
+			<type>pom</type>
+			<scope>import</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.dkpro.core</groupId>
+			<artifactId>dkpro-core-gpl</artifactId>
+			<version>${dkpro.version}</version>
+			<type>pom</type>
+			<scope>import</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.dkpro.core</groupId>
+			<artifactId>dkpro-core-api-segmentation-asl</artifactId>
+			<version>${dkpro.version}</version>
+		</dependency>
+	</dependencies>
 
 	<build>
 		<plugins>
@@ -129,79 +218,27 @@
 					</execution>
 				</executions>
 			</plugin>
+			
 			<plugin>
-				<groupId>org.sonatype.plugins</groupId>
-				<artifactId>nexus-staging-maven-plugin</artifactId>
-				<version>1.6.3</version>
-				<extensions>true</extensions>
-				<configuration>
-					<serverId>ossrh</serverId>
-					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
-					<autoReleaseAfterClose>false</autoReleaseAfterClose>
-				</configuration>
+		        <groupId>external.atlassian.jgitflow</groupId>
+		        <artifactId>jgitflow-maven-plugin</artifactId>
+		        <version>1.0-m5.1</version>
+		        <configuration>
+		            <flowInitContext>
+		                <masterBranchName>master</masterBranchName>
+		                <developBranchName>development</developBranchName>
+		                <featureBranchPrefix>feature-</featureBranchPrefix>
+		                <releaseBranchPrefix>release-</releaseBranchPrefix>
+		                <hotfixBranchPrefix>hotfix-</hotfixBranchPrefix>
+		                <versionTagPrefix>version-</versionTagPrefix>
+		            </flowInitContext>
+<!-- 		            <username>USERNAME_FOR_A_GIT_USER</username> -->
+<!-- 		            <password>PASSWORD_FOR_A_GIT_USER</password> -->
+		            <noDeploy>true</noDeploy>
+		            <squash>false</squash>
+		            <scmCommentPrefix>[RELEASE] </scmCommentPrefix>
+		    	</configuration>
 			</plugin>
 		</plugins>
 	</build>
-	
-	<distributionManagement>
-		<snapshotRepository>
-			<id>ossrh</id>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
-		</snapshotRepository>
-		<repository>
-			<id>ossrh</id>
-			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
-		</repository>
-	</distributionManagement>
-
-	<dependencies>
-		<!-- for practically every component -->
-		<dependency>
-			<groupId>org.apache.uima</groupId>
-			<artifactId>uimaj-core</artifactId>
-			<version>${uimaj.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<!-- for the StanfordPOSTaggerWrapper -->
-		<dependency>
-			<groupId>edu.stanford.nlp</groupId>
-			<artifactId>stanford-corenlp</artifactId>
-			<version>3.3.1</version>
-			<scope>provided</scope>
-		</dependency>
-		<!-- these are for JVnTextPro -->
-		<dependency>
-			<groupId>args4j</groupId>
-			<artifactId>args4j</artifactId>
-			<version>2.32</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.dbtsai.lbfgs</groupId>
-			<artifactId>lbfgs</artifactId>
-			<version>0.1</version>
-			<scope>provided</scope>
-		</dependency>
-		
-		<!-- DKPro types -->
-		<dependency>
-			<groupId>org.dkpro.core</groupId>
-			<artifactId>dkpro-core-asl</artifactId>
-			<version>${dkpro.version}</version>
-			<type>pom</type>
-			<scope>import</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.dkpro.core</groupId>
-			<artifactId>dkpro-core-gpl</artifactId>
-			<version>${dkpro.version}</version>
-			<type>pom</type>
-			<scope>import</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.dkpro.core</groupId>
-			<artifactId>dkpro-core-api-segmentation-asl</artifactId>
-			<version>${dkpro.version}</version>
-		</dependency>
-	</dependencies>
 </project>
