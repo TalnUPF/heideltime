@@ -28,7 +28,7 @@
 		
 		<uimaj.version>2.10.3</uimaj.version>
 		<uimafit.version>2.5.0</uimafit.version>
-		<dkpro.version>1.12.1-SNAPSHOT</dkpro.version>
+		<dkpro.version>1.12.1-taln-rc1</dkpro.version>
 	</properties>
 	
 	<modules>
