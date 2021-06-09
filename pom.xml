@@ -5,6 +5,7 @@
 	<groupId>com.github.heideltime</groupId>
 	<artifactId>heideltime</artifactId>
 	<version>2.2.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
 
 	<name>HeidelTime</name>
 	<description>HeidelTime is a multilingual cross-domain temporal tagger that extracts temporal expressions from documents and normalizes them according to the TIMEX3 annotation standard.</description>
@@ -27,8 +28,13 @@
 		
 		<uimaj.version>2.10.3</uimaj.version>
 		<uimafit.version>2.5.0</uimafit.version>
-		<dkpro.version>1.12.1-SNAPSHOT</dkpro.version>
+		<dkpro.version>1.12.1-taln-rc1</dkpro.version>
 	</properties>
+	
+	<modules>
+		<module>heideltime-types</module>
+		<module>heideltime-core</module>
+	</modules>
 
 	<developers>
 		<developer>
@@ -89,56 +95,16 @@
         </repository>
     </repositories>
 
-	<dependencies>
-		<!-- for practically every component -->
-		<dependency>
-			<groupId>org.apache.uima</groupId>
-			<artifactId>uimaj-core</artifactId>
-			<version>${uimaj.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<!-- for the StanfordPOSTaggerWrapper -->
-		<dependency>
-			<groupId>edu.stanford.nlp</groupId>
-			<artifactId>stanford-corenlp</artifactId>
-			<version>3.3.1</version>
-			<scope>provided</scope>
-		</dependency>
-		<!-- these are for JVnTextPro -->
-		<dependency>
-			<groupId>args4j</groupId>
-			<artifactId>args4j</artifactId>
-			<version>2.32</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.dbtsai.lbfgs</groupId>
-			<artifactId>lbfgs</artifactId>
-			<version>0.1</version>
-			<scope>provided</scope>
-		</dependency>
-		
-		<!-- DKPro types -->
-		<dependency>
-			<groupId>org.dkpro.core</groupId>
-			<artifactId>dkpro-core-asl</artifactId>
-			<version>${dkpro.version}</version>
-			<type>pom</type>
-			<scope>import</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.dkpro.core</groupId>
-			<artifactId>dkpro-core-gpl</artifactId>
-			<version>${dkpro.version}</version>
-			<type>pom</type>
-			<scope>import</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.dkpro.core</groupId>
-			<artifactId>dkpro-core-api-segmentation-asl</artifactId>
-			<version>${dkpro.version}</version>
-		</dependency>
-	</dependencies>
+	<dependencyManagement>
+		<dependencies>
+			<!-- for practically every component -->
+			<dependency>
+				<groupId>org.apache.uima</groupId>
+				<artifactId>uimaj-core</artifactId>
+				<version>${uimaj.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<build>
 		<plugins>
@@ -157,7 +123,7 @@
 				<configuration>
 				</configuration>
 			</plugin>
-			<plugin>
+			<!-- plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
 				<version>1.6</version>
@@ -171,7 +137,7 @@
 						</configuration>
 					</execution>
 				</executions>
-			</plugin>
+			</plugin-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
@@ -201,20 +167,6 @@
 						<configuration>
 							<additionalparam>-Xdoclint:none</additionalparam>
 						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-gpg-plugin</artifactId>
-				<version>1.5</version>
-				<executions>
-					<execution>
-						<id>sign-artifacts</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>sign</goal>
-						</goals>
 					</execution>
 				</executions>
 			</plugin-->
