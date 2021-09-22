@@ -25,9 +25,9 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		
-		<uimaj.version>2.10.3</uimaj.version>
-		<uimafit.version>2.5.0</uimafit.version>
-		<dkpro.version>1.12.1-taln-rc1</dkpro.version>
+		<uimaj.version>3.1.1</uimaj.version>
+		<uimafit.version>3.1.0</uimafit.version>
+		<dkpro.version>2.2.0</dkpro.version>
 	</properties>
 	
 	<modules>

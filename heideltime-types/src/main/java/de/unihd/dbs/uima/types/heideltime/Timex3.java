@@ -3,6 +3,12 @@
 /* First created by JCasGen Wed May 26 12:16:57 CEST 2021 */
 package de.unihd.dbs.uima.types.heideltime;
 
+import java.lang.invoke.CallSite;
+import java.lang.invoke.MethodHandle;
+
+import org.apache.uima.cas.impl.CASImpl;
+import org.apache.uima.cas.impl.TypeImpl;
+import org.apache.uima.cas.impl.TypeSystemImpl;
 import org.apache.uima.jcas.JCas; 
 import org.apache.uima.jcas.JCasRegistry;
 import org.apache.uima.jcas.cas.TOP_Type;
@@ -11,10 +17,16 @@ import org.apache.uima.jcas.tcas.Annotation;
 
 
 /** 
- * Updated by JCasGen Wed May 26 12:16:57 CEST 2021
+ * Updated by JCasGen Mon Sep 20 11:10:44 CEST 2021
  * XML source: D:/treball/repos/heideltime/heideltime-types/src/main/resources/desc/types/HeidelTime_TypeSystem.xml
  * @generated */
 public class Timex3 extends Annotation {
+  /** @generated
+   * @ordered 
+   */
+  @SuppressWarnings ("hiding")
+  public final static String _TypeName = "de.unihd.dbs.uima.types.heideltime.Timex3";
+  
   /** @generated
    * @ordered 
    */
@@ -31,17 +43,66 @@ public class Timex3 extends Annotation {
   @Override
   public              int getTypeIndexID() {return typeIndexID;}
  
+ 
+  /* *******************
+   *   Feature Offsets *
+   * *******************/ 
+   
+  public final static String _FeatName_filename = "filename";
+  public final static String _FeatName_sentId = "sentId";
+  public final static String _FeatName_firstTokId = "firstTokId";
+  public final static String _FeatName_allTokIds = "allTokIds";
+  public final static String _FeatName_timexId = "timexId";
+  public final static String _FeatName_timexInstance = "timexInstance";
+  public final static String _FeatName_timexType = "timexType";
+  public final static String _FeatName_timexValue = "timexValue";
+  public final static String _FeatName_foundByRule = "foundByRule";
+  public final static String _FeatName_timexQuant = "timexQuant";
+  public final static String _FeatName_timexFreq = "timexFreq";
+  public final static String _FeatName_timexMod = "timexMod";
+  public final static String _FeatName_emptyValue = "emptyValue";
+
+
+  /* Feature Adjusted Offsets */
+  private final static CallSite _FC_filename = TypeSystemImpl.createCallSite(Timex3.class, "filename");
+  private final static MethodHandle _FH_filename = _FC_filename.dynamicInvoker();
+  private final static CallSite _FC_sentId = TypeSystemImpl.createCallSite(Timex3.class, "sentId");
+  private final static MethodHandle _FH_sentId = _FC_sentId.dynamicInvoker();
+  private final static CallSite _FC_firstTokId = TypeSystemImpl.createCallSite(Timex3.class, "firstTokId");
+  private final static MethodHandle _FH_firstTokId = _FC_firstTokId.dynamicInvoker();
+  private final static CallSite _FC_allTokIds = TypeSystemImpl.createCallSite(Timex3.class, "allTokIds");
+  private final static MethodHandle _FH_allTokIds = _FC_allTokIds.dynamicInvoker();
+  private final static CallSite _FC_timexId = TypeSystemImpl.createCallSite(Timex3.class, "timexId");
+  private final static MethodHandle _FH_timexId = _FC_timexId.dynamicInvoker();
+  private final static CallSite _FC_timexInstance = TypeSystemImpl.createCallSite(Timex3.class, "timexInstance");
+  private final static MethodHandle _FH_timexInstance = _FC_timexInstance.dynamicInvoker();
+  private final static CallSite _FC_timexType = TypeSystemImpl.createCallSite(Timex3.class, "timexType");
+  private final static MethodHandle _FH_timexType = _FC_timexType.dynamicInvoker();
+  private final static CallSite _FC_timexValue = TypeSystemImpl.createCallSite(Timex3.class, "timexValue");
+  private final static MethodHandle _FH_timexValue = _FC_timexValue.dynamicInvoker();
+  private final static CallSite _FC_foundByRule = TypeSystemImpl.createCallSite(Timex3.class, "foundByRule");
+  private final static MethodHandle _FH_foundByRule = _FC_foundByRule.dynamicInvoker();
+  private final static CallSite _FC_timexQuant = TypeSystemImpl.createCallSite(Timex3.class, "timexQuant");
+  private final static MethodHandle _FH_timexQuant = _FC_timexQuant.dynamicInvoker();
+  private final static CallSite _FC_timexFreq = TypeSystemImpl.createCallSite(Timex3.class, "timexFreq");
+  private final static MethodHandle _FH_timexFreq = _FC_timexFreq.dynamicInvoker();
+  private final static CallSite _FC_timexMod = TypeSystemImpl.createCallSite(Timex3.class, "timexMod");
+  private final static MethodHandle _FH_timexMod = _FC_timexMod.dynamicInvoker();
+  private final static CallSite _FC_emptyValue = TypeSystemImpl.createCallSite(Timex3.class, "emptyValue");
+  private final static MethodHandle _FH_emptyValue = _FC_emptyValue.dynamicInvoker();
+
+   
   /** Never called.  Disable default constructor
    * @generated */
   protected Timex3() {/* intentionally empty block */}
     
   /** Internal - constructor used by generator 
    * @generated
-   * @param addr low level Feature Structure reference
+   * @param casImpl the CAS this Feature Structure belongs to
    * @param type the type of this Feature Structure 
    */
-  public Timex3(int addr, TOP_Type type) {
-    super(addr, type);
+  public Timex3(TypeImpl type, CASImpl casImpl) {
+    super(type, casImpl);
     readObject();
   }
   
@@ -52,6 +113,7 @@ public class Timex3 extends Annotation {
     super(jcas);
     readObject();   
   } 
+
 
   /** @generated
    * @param jcas JCas to which this Feature Structure belongs
@@ -83,19 +145,18 @@ public class Timex3 extends Annotation {
    * @generated
    * @return value of the feature 
    */
-  public String getFilename() {
-    if (Timex3_Type.featOkTst && ((Timex3_Type)jcasType).casFeat_filename == null)
-      jcasType.jcas.throwFeatMissing("filename", "de.unihd.dbs.uima.types.heideltime.Timex3");
-    return jcasType.ll_cas.ll_getStringValue(addr, ((Timex3_Type)jcasType).casFeatCode_filename);}
+  public String getFilename() { 
+    return _getStringValueNc(wrapGetIntCatchException(_FH_filename));
+  }
     
   /** setter for filename - sets  
    * @generated
    * @param v value to set into the feature 
    */
   public void setFilename(String v) {
-    if (Timex3_Type.featOkTst && ((Timex3_Type)jcasType).casFeat_filename == null)
-      jcasType.jcas.throwFeatMissing("filename", "de.unihd.dbs.uima.types.heideltime.Timex3");
-    jcasType.ll_cas.ll_setStringValue(addr, ((Timex3_Type)jcasType).casFeatCode_filename, v);}    
+    _setStringValueNfc(wrapGetIntCatchException(_FH_filename), v);
+  }    
+    
    
     
   //*--------------*
@@ -105,19 +166,18 @@ public class Timex3 extends Annotation {
    * @generated
    * @return value of the feature 
    */
-  public int getSentId() {
-    if (Timex3_Type.featOkTst && ((Timex3_Type)jcasType).casFeat_sentId == null)
-      jcasType.jcas.throwFeatMissing("sentId", "de.unihd.dbs.uima.types.heideltime.Timex3");
-    return jcasType.ll_cas.ll_getIntValue(addr, ((Timex3_Type)jcasType).casFeatCode_sentId);}
+  public int getSentId() { 
+    return _getIntValueNc(wrapGetIntCatchException(_FH_sentId));
+  }
     
   /** setter for sentId - sets  
    * @generated
    * @param v value to set into the feature 
    */
   public void setSentId(int v) {
-    if (Timex3_Type.featOkTst && ((Timex3_Type)jcasType).casFeat_sentId == null)
-      jcasType.jcas.throwFeatMissing("sentId", "de.unihd.dbs.uima.types.heideltime.Timex3");
-    jcasType.ll_cas.ll_setIntValue(addr, ((Timex3_Type)jcasType).casFeatCode_sentId, v);}    
+    _setIntValueNfc(wrapGetIntCatchException(_FH_sentId), v);
+  }    
+    
    
     
   //*--------------*
@@ -127,19 +187,18 @@ public class Timex3 extends Annotation {
    * @generated
    * @return value of the feature 
    */
-  public int getFirstTokId() {
-    if (Timex3_Type.featOkTst && ((Timex3_Type)jcasType).casFeat_firstTokId == null)
-      jcasType.jcas.throwFeatMissing("firstTokId", "de.unihd.dbs.uima.types.heideltime.Timex3");
-    return jcasType.ll_cas.ll_getIntValue(addr, ((Timex3_Type)jcasType).casFeatCode_firstTokId);}
+  public int getFirstTokId() { 
+    return _getIntValueNc(wrapGetIntCatchException(_FH_firstTokId));
+  }
     
   /** setter for firstTokId - sets  
    * @generated
    * @param v value to set into the feature 
    */
   public void setFirstTokId(int v) {
-    if (Timex3_Type.featOkTst && ((Timex3_Type)jcasType).casFeat_firstTokId == null)
-      jcasType.jcas.throwFeatMissing("firstTokId", "de.unihd.dbs.uima.types.heideltime.Timex3");
-    jcasType.ll_cas.ll_setIntValue(addr, ((Timex3_Type)jcasType).casFeatCode_firstTokId, v);}    
+    _setIntValueNfc(wrapGetIntCatchException(_FH_firstTokId), v);
+  }    
+    
    
     
   //*--------------*
@@ -149,19 +208,18 @@ public class Timex3 extends Annotation {
    * @generated
    * @return value of the feature 
    */
-  public String getAllTokIds() {
-    if (Timex3_Type.featOkTst && ((Timex3_Type)jcasType).casFeat_allTokIds == null)
-      jcasType.jcas.throwFeatMissing("allTokIds", "de.unihd.dbs.uima.types.heideltime.Timex3");
-    return jcasType.ll_cas.ll_getStringValue(addr, ((Timex3_Type)jcasType).casFeatCode_allTokIds);}
+  public String getAllTokIds() { 
+    return _getStringValueNc(wrapGetIntCatchException(_FH_allTokIds));
+  }
     
   /** setter for allTokIds - sets  
    * @generated
    * @param v value to set into the feature 
    */
   public void setAllTokIds(String v) {
-    if (Timex3_Type.featOkTst && ((Timex3_Type)jcasType).casFeat_allTokIds == null)
-      jcasType.jcas.throwFeatMissing("allTokIds", "de.unihd.dbs.uima.types.heideltime.Timex3");
-    jcasType.ll_cas.ll_setStringValue(addr, ((Timex3_Type)jcasType).casFeatCode_allTokIds, v);}    
+    _setStringValueNfc(wrapGetIntCatchException(_FH_allTokIds), v);
+  }    
+    
    
     
   //*--------------*
@@ -171,19 +229,18 @@ public class Timex3 extends Annotation {
    * @generated
    * @return value of the feature 
    */
-  public String getTimexId() {
-    if (Timex3_Type.featOkTst && ((Timex3_Type)jcasType).casFeat_timexId == null)
-      jcasType.jcas.throwFeatMissing("timexId", "de.unihd.dbs.uima.types.heideltime.Timex3");
-    return jcasType.ll_cas.ll_getStringValue(addr, ((Timex3_Type)jcasType).casFeatCode_timexId);}
+  public String getTimexId() { 
+    return _getStringValueNc(wrapGetIntCatchException(_FH_timexId));
+  }
     
   /** setter for timexId - sets  
    * @generated
    * @param v value to set into the feature 
    */
   public void setTimexId(String v) {
-    if (Timex3_Type.featOkTst && ((Timex3_Type)jcasType).casFeat_timexId == null)
-      jcasType.jcas.throwFeatMissing("timexId", "de.unihd.dbs.uima.types.heideltime.Timex3");
-    jcasType.ll_cas.ll_setStringValue(addr, ((Timex3_Type)jcasType).casFeatCode_timexId, v);}    
+    _setStringValueNfc(wrapGetIntCatchException(_FH_timexId), v);
+  }    
+    
    
     
   //*--------------*
@@ -193,19 +250,18 @@ public class Timex3 extends Annotation {
    * @generated
    * @return value of the feature 
    */
-  public int getTimexInstance() {
-    if (Timex3_Type.featOkTst && ((Timex3_Type)jcasType).casFeat_timexInstance == null)
-      jcasType.jcas.throwFeatMissing("timexInstance", "de.unihd.dbs.uima.types.heideltime.Timex3");
-    return jcasType.ll_cas.ll_getIntValue(addr, ((Timex3_Type)jcasType).casFeatCode_timexInstance);}
+  public int getTimexInstance() { 
+    return _getIntValueNc(wrapGetIntCatchException(_FH_timexInstance));
+  }
     
   /** setter for timexInstance - sets  
    * @generated
    * @param v value to set into the feature 
    */
   public void setTimexInstance(int v) {
-    if (Timex3_Type.featOkTst && ((Timex3_Type)jcasType).casFeat_timexInstance == null)
-      jcasType.jcas.throwFeatMissing("timexInstance", "de.unihd.dbs.uima.types.heideltime.Timex3");
-    jcasType.ll_cas.ll_setIntValue(addr, ((Timex3_Type)jcasType).casFeatCode_timexInstance, v);}    
+    _setIntValueNfc(wrapGetIntCatchException(_FH_timexInstance), v);
+  }    
+    
    
     
   //*--------------*
@@ -215,19 +271,18 @@ public class Timex3 extends Annotation {
    * @generated
    * @return value of the feature 
    */
-  public String getTimexType() {
-    if (Timex3_Type.featOkTst && ((Timex3_Type)jcasType).casFeat_timexType == null)
-      jcasType.jcas.throwFeatMissing("timexType", "de.unihd.dbs.uima.types.heideltime.Timex3");
-    return jcasType.ll_cas.ll_getStringValue(addr, ((Timex3_Type)jcasType).casFeatCode_timexType);}
+  public String getTimexType() { 
+    return _getStringValueNc(wrapGetIntCatchException(_FH_timexType));
+  }
     
   /** setter for timexType - sets  
    * @generated
    * @param v value to set into the feature 
    */
   public void setTimexType(String v) {
-    if (Timex3_Type.featOkTst && ((Timex3_Type)jcasType).casFeat_timexType == null)
-      jcasType.jcas.throwFeatMissing("timexType", "de.unihd.dbs.uima.types.heideltime.Timex3");
-    jcasType.ll_cas.ll_setStringValue(addr, ((Timex3_Type)jcasType).casFeatCode_timexType, v);}    
+    _setStringValueNfc(wrapGetIntCatchException(_FH_timexType), v);
+  }    
+    
    
     
   //*--------------*
@@ -237,19 +292,18 @@ public class Timex3 extends Annotation {
    * @generated
    * @return value of the feature 
    */
-  public String getTimexValue() {
-    if (Timex3_Type.featOkTst && ((Timex3_Type)jcasType).casFeat_timexValue == null)
-      jcasType.jcas.throwFeatMissing("timexValue", "de.unihd.dbs.uima.types.heideltime.Timex3");
-    return jcasType.ll_cas.ll_getStringValue(addr, ((Timex3_Type)jcasType).casFeatCode_timexValue);}
+  public String getTimexValue() { 
+    return _getStringValueNc(wrapGetIntCatchException(_FH_timexValue));
+  }
     
   /** setter for timexValue - sets  
    * @generated
    * @param v value to set into the feature 
    */
   public void setTimexValue(String v) {
-    if (Timex3_Type.featOkTst && ((Timex3_Type)jcasType).casFeat_timexValue == null)
-      jcasType.jcas.throwFeatMissing("timexValue", "de.unihd.dbs.uima.types.heideltime.Timex3");
-    jcasType.ll_cas.ll_setStringValue(addr, ((Timex3_Type)jcasType).casFeatCode_timexValue, v);}    
+    _setStringValueNfc(wrapGetIntCatchException(_FH_timexValue), v);
+  }    
+    
    
     
   //*--------------*
@@ -259,19 +313,18 @@ public class Timex3 extends Annotation {
    * @generated
    * @return value of the feature 
    */
-  public String getFoundByRule() {
-    if (Timex3_Type.featOkTst && ((Timex3_Type)jcasType).casFeat_foundByRule == null)
-      jcasType.jcas.throwFeatMissing("foundByRule", "de.unihd.dbs.uima.types.heideltime.Timex3");
-    return jcasType.ll_cas.ll_getStringValue(addr, ((Timex3_Type)jcasType).casFeatCode_foundByRule);}
+  public String getFoundByRule() { 
+    return _getStringValueNc(wrapGetIntCatchException(_FH_foundByRule));
+  }
     
   /** setter for foundByRule - sets  
    * @generated
    * @param v value to set into the feature 
    */
   public void setFoundByRule(String v) {
-    if (Timex3_Type.featOkTst && ((Timex3_Type)jcasType).casFeat_foundByRule == null)
-      jcasType.jcas.throwFeatMissing("foundByRule", "de.unihd.dbs.uima.types.heideltime.Timex3");
-    jcasType.ll_cas.ll_setStringValue(addr, ((Timex3_Type)jcasType).casFeatCode_foundByRule, v);}    
+    _setStringValueNfc(wrapGetIntCatchException(_FH_foundByRule), v);
+  }    
+    
    
     
   //*--------------*
@@ -281,19 +334,18 @@ public class Timex3 extends Annotation {
    * @generated
    * @return value of the feature 
    */
-  public String getTimexQuant() {
-    if (Timex3_Type.featOkTst && ((Timex3_Type)jcasType).casFeat_timexQuant == null)
-      jcasType.jcas.throwFeatMissing("timexQuant", "de.unihd.dbs.uima.types.heideltime.Timex3");
-    return jcasType.ll_cas.ll_getStringValue(addr, ((Timex3_Type)jcasType).casFeatCode_timexQuant);}
+  public String getTimexQuant() { 
+    return _getStringValueNc(wrapGetIntCatchException(_FH_timexQuant));
+  }
     
   /** setter for timexQuant - sets  
    * @generated
    * @param v value to set into the feature 
    */
   public void setTimexQuant(String v) {
-    if (Timex3_Type.featOkTst && ((Timex3_Type)jcasType).casFeat_timexQuant == null)
-      jcasType.jcas.throwFeatMissing("timexQuant", "de.unihd.dbs.uima.types.heideltime.Timex3");
-    jcasType.ll_cas.ll_setStringValue(addr, ((Timex3_Type)jcasType).casFeatCode_timexQuant, v);}    
+    _setStringValueNfc(wrapGetIntCatchException(_FH_timexQuant), v);
+  }    
+    
    
     
   //*--------------*
@@ -303,19 +355,18 @@ public class Timex3 extends Annotation {
    * @generated
    * @return value of the feature 
    */
-  public String getTimexFreq() {
-    if (Timex3_Type.featOkTst && ((Timex3_Type)jcasType).casFeat_timexFreq == null)
-      jcasType.jcas.throwFeatMissing("timexFreq", "de.unihd.dbs.uima.types.heideltime.Timex3");
-    return jcasType.ll_cas.ll_getStringValue(addr, ((Timex3_Type)jcasType).casFeatCode_timexFreq);}
+  public String getTimexFreq() { 
+    return _getStringValueNc(wrapGetIntCatchException(_FH_timexFreq));
+  }
     
   /** setter for timexFreq - sets  
    * @generated
    * @param v value to set into the feature 
    */
   public void setTimexFreq(String v) {
-    if (Timex3_Type.featOkTst && ((Timex3_Type)jcasType).casFeat_timexFreq == null)
-      jcasType.jcas.throwFeatMissing("timexFreq", "de.unihd.dbs.uima.types.heideltime.Timex3");
-    jcasType.ll_cas.ll_setStringValue(addr, ((Timex3_Type)jcasType).casFeatCode_timexFreq, v);}    
+    _setStringValueNfc(wrapGetIntCatchException(_FH_timexFreq), v);
+  }    
+    
    
     
   //*--------------*
@@ -325,19 +376,18 @@ public class Timex3 extends Annotation {
    * @generated
    * @return value of the feature 
    */
-  public String getTimexMod() {
-    if (Timex3_Type.featOkTst && ((Timex3_Type)jcasType).casFeat_timexMod == null)
-      jcasType.jcas.throwFeatMissing("timexMod", "de.unihd.dbs.uima.types.heideltime.Timex3");
-    return jcasType.ll_cas.ll_getStringValue(addr, ((Timex3_Type)jcasType).casFeatCode_timexMod);}
+  public String getTimexMod() { 
+    return _getStringValueNc(wrapGetIntCatchException(_FH_timexMod));
+  }
     
   /** setter for timexMod - sets  
    * @generated
    * @param v value to set into the feature 
    */
   public void setTimexMod(String v) {
-    if (Timex3_Type.featOkTst && ((Timex3_Type)jcasType).casFeat_timexMod == null)
-      jcasType.jcas.throwFeatMissing("timexMod", "de.unihd.dbs.uima.types.heideltime.Timex3");
-    jcasType.ll_cas.ll_setStringValue(addr, ((Timex3_Type)jcasType).casFeatCode_timexMod, v);}    
+    _setStringValueNfc(wrapGetIntCatchException(_FH_timexMod), v);
+  }    
+    
    
     
   //*--------------*
@@ -347,19 +397,18 @@ public class Timex3 extends Annotation {
    * @generated
    * @return value of the feature 
    */
-  public String getEmptyValue() {
-    if (Timex3_Type.featOkTst && ((Timex3_Type)jcasType).casFeat_emptyValue == null)
-      jcasType.jcas.throwFeatMissing("emptyValue", "de.unihd.dbs.uima.types.heideltime.Timex3");
-    return jcasType.ll_cas.ll_getStringValue(addr, ((Timex3_Type)jcasType).casFeatCode_emptyValue);}
+  public String getEmptyValue() { 
+    return _getStringValueNc(wrapGetIntCatchException(_FH_emptyValue));
+  }
     
   /** setter for emptyValue - sets attribute to hold a value for "empty" timex3 tags 
    * @generated
    * @param v value to set into the feature 
    */
   public void setEmptyValue(String v) {
-    if (Timex3_Type.featOkTst && ((Timex3_Type)jcasType).casFeat_emptyValue == null)
-      jcasType.jcas.throwFeatMissing("emptyValue", "de.unihd.dbs.uima.types.heideltime.Timex3");
-    jcasType.ll_cas.ll_setStringValue(addr, ((Timex3_Type)jcasType).casFeatCode_emptyValue, v);}    
+    _setStringValueNfc(wrapGetIntCatchException(_FH_emptyValue), v);
+  }    
+    
   }
 
     
